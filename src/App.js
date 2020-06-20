@@ -28,6 +28,14 @@ export default function App() {
       ));
   }
 
+  async function handleDeleteRepository(id) {
+    await api.delete(`/repositories/${id}`);
+
+    const filteredRepos = repositories.filter(repo => repo.id !== id);
+
+    setRepositories(filteredRepos)
+  }
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -53,17 +61,25 @@ export default function App() {
                 </Text>
               </View>
 
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleLikeRepository(repo.id)}
-                testID={`like-button-${repo.id}`}
-              >
-                <Text style={styles.buttonText}>Curtir</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={styles.likeButton}
+                  onPress={() => handleLikeRepository(repo.id)}
+                  testID={`like-button-${repo.id}`}
+                >
+                  <Text style={styles.buttonLikeText}>Curtir</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDeleteRepository(repo.id)}
+                  testID={`like-button-${repo.id}`}
+                >
+                  <Text style={styles.buttonDeleteText}>Remover</Text>
+                </TouchableOpacity>
+              </View>
             </>
           )}
         />
-
       </SafeAreaView>
     </>
   );
@@ -107,11 +123,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginRight: 10,
   },
-  button: {
-    marginTop: 10,
+  buttonsContainer: {
     flexDirection: "row"
   },
-  buttonText: {
+  likeButton: {
+    marginTop: 10,
+  },
+  deleteButton: {
+    marginTop: 10,
+  },
+  buttonLikeText: {
     fontSize: 14,
     fontWeight: "bold",
     marginRight: 10,
@@ -119,4 +140,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#7159c1",
     padding: 15,
   },
+  buttonDeleteText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginRight: 10,
+    color: "#fff",
+    backgroundColor: "red",
+    padding: 15,
+  }
 });
